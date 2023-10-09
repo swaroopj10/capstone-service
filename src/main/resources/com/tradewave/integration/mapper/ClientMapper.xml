@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+                  
+<mapper namespace="com.tradewave.integration.mapper.ClientMapper">
+
+
+<insert id="insertClient" parameterType="com.tradewave.business.Client">
+        
+        INSERT INTO cp_client (clientid,email, dateofbirth, country, postalcode)
+        VALUES (
+        	#{clientId},
+            #{email},
+            TO_DATE(#{dateOfBirth}, 'YYYY-MM-DD'),
+            #{country},
+            #{postalCode}
+        )
+    </insert>
+ 	<insert id="insertClientIdentification" parameterType="com.tradewave.business.Client">
+        INSERT INTO cp_client_identification (clientid, type, value)
+        VALUES (
+            #{clientId},
+            #{clientIdentification.type},
+            #{clientIdentification.value}
+        )
+    </insert>
+    
+    <insert id="insertClientResponse" parameterType="com.tradewave.business.ClientResponse">
+        INSERT INTO cp_client_auth (clientId, email, token)
+		VALUES (#{clientId}, #{email}, #{token})
+
+    </insert>
+
+	<select id="getUserByEmail" resultType="String">
+        SELECT email FROM cp_client
+        WHERE clientId = #{clientId}
+    </select>
+    
+	
+	<select id="getToken" resultType="String">
+		SELECT token FROM cp_client_auth 
+		WHERE email = #{email}
+	</select>
+	
+	<select id="getClientId" resultType="String">
+		SELECT 1 from cp_client 
+		WHERE clientId = #{clientId}
+	</select>
+     
+</mapper>
+
