@@ -32,8 +32,8 @@
     </insert>
 
 	<select id="getUserByEmail" resultType="String">
-        SELECT email FROM cp_client
-        WHERE clientId = #{clientId}
+        SELECT 1 FROM cp_client
+        WHERE email = #{email}
     </select>
     
 	

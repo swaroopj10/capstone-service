@@ -42,8 +42,8 @@ public class ClientDaoMyBatisImpl implements ClientDao{
 	}
 
 	@Override
-	public String getUserByEmail(String clientId) {
-		return mapper.getUserByEmail(clientId);
+	public String getUserByEmail(String email) {
+		return mapper.getUserByEmail(email);
 	}
 
 

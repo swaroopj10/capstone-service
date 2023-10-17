@@ -57,9 +57,10 @@ public class ClientController {
                 ClientResponse clientResponse = objectMapper.readValue(responseBody, ClientResponse.class);
                 if (clientResponse != null) {
                 	client.setClientId(clientResponse.getClientId());
-                    service.insertClient(client);
-                    service.insertClientIdentification(client);
-                    service.insertClientToken(clientResponse);
+//                    service.insertClient(client);
+//                    service.insertClientIdentification(client);
+//                    service.insertClientToken(clientResponse);
+                    service.register(client, clientResponse);
                     return ResponseEntity.ok(responseBody); 
                 }
             }
@@ -84,9 +85,11 @@ public class ClientController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Client ID does not exist.");
             }
             
-            String email = service.getUserByEmail(credentials.getClientId());
+            String email = service.getUserByEmail(credentials.getEmail());
             if (email == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email does not exist.");
+            } else {
+            	email = credentials.getEmail();
             }
 
             String token = service.generateToken(email);

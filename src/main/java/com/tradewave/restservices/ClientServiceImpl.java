@@ -64,7 +64,7 @@ public class ClientServiceImpl implements ClientService{
 
 	@Override
 	@Transactional
-	public String register(Client client, ClientResponse clientResponse) throws SQLException {
+	public int register(Client client, ClientResponse clientResponse) throws SQLException {
 		try {
 			if(client!=null) {
 				if(!checkEmailExists(client.getEmail())) {
@@ -74,7 +74,7 @@ public class ClientServiceImpl implements ClientService{
 				insertClient(client);
 				insertClientIdentification(client);
 				insertClientToken(clientResponse);
-				return "success";
+				return 1;
 			}
 			else {
 				throw new SQLException("DB ERROR");
@@ -91,8 +91,8 @@ public class ClientServiceImpl implements ClientService{
 	}
 	
 	@Override
-	public String getUserByEmail(String clientId) {
-		return dao.getUserByEmail(clientId);
+	public String getUserByEmail(String email) {
+		return dao.getUserByEmail(email);
 	}
 
 	@Override

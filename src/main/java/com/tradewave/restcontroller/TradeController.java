@@ -1,6 +1,5 @@
 package com.tradewave.restcontroller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,12 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tradewave.business.Instrument;
+import com.tradewave.business.InvestmentPreference;
 import com.tradewave.business.Order;
 import com.tradewave.business.Price;
+import com.tradewave.business.RiskTolerance;
 import com.tradewave.business.Trade;
+import com.tradewave.restservices.PreferenceService;
 import com.tradewave.restservices.TradeService;
 
 @RestController
@@ -40,6 +42,9 @@ public class TradeController {
     
     @Autowired
     private TradeService tradeService;
+    
+    @Autowired
+	private PreferenceService preferenceService;
 
     @GetMapping("/prices")
     public ResponseEntity<Price[]> getPrices(@RequestParam(required=false, defaultValue="")String categoryId) {
@@ -136,5 +141,42 @@ public class TradeController {
         } catch (TradeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+    
+    @GetMapping("/roboadvisor/buy/{clientId}")
+    public ResponseEntity<Price[]> getBuyStocks(@PathVariable String clientId) {
+    	InvestmentPreference preferences = preferenceService.getPreferencebyId(clientId);
+    	RiskTolerance tolerance = preferences.getRiskTolerance();
+    	if(tolerance.equals(RiskTolerance.AGGRESSIVE)) {
+    		String pricesUrl = nodeServiceBaseUrl + "/prices/STOCK";
+    		ResponseEntity<String> response = restTemplate.getForEntity(pricesUrl, String.class);
+            try {
+                Price[] prices = objectMapper.readValue(response.getBody(), Price[].class);
+                return ResponseEntity.ok(prices);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+    	} else if(tolerance.equals(RiskTolerance.BELOW_AVERAGE) || tolerance.equals(RiskTolerance.AVERAGE) || tolerance.equals(RiskTolerance.ABOVE_AVERAGE)) {
+    		String pricesUrl = nodeServiceBaseUrl + "/prices/GOVT";
+    		ResponseEntity<String> response = restTemplate.getForEntity(pricesUrl, String.class);
+            try {
+                Price[] prices = objectMapper.readValue(response.getBody(), Price[].class);
+                return ResponseEntity.ok(prices);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+    	} else {
+    		String pricesUrl = nodeServiceBaseUrl + "/prices/CD";
+    		ResponseEntity<String> response = restTemplate.getForEntity(pricesUrl, String.class);
+            try {
+                Price[] prices = objectMapper.readValue(response.getBody(), Price[].class);
+                return ResponseEntity.ok(prices);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+    	}
     }
 }

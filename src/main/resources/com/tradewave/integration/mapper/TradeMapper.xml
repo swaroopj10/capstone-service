@@ -28,6 +28,10 @@
 	    FROM cp_trade t
 	    INNER JOIN cp_order o ON t.orderId = o.orderId
 	    WHERE t.clientId = #{clientId}
+	    ORDER BY CASE
+        	WHEN direction = 'B' THEN 0
+        	WHEN direction = 'S' THEN 1
+        END
 	</select>
 
 </mapper>

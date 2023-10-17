@@ -3,40 +3,9 @@ package com.tradewave.business;
 import java.util.Objects;
 
 public class Instrument {
-    @Override
-	public String toString() {
-		return "Instrument [instrumentId=" + instrumentId + ", description=" + description + ", externalIdType="
-				+ externalIdType + ", externalId=" + externalId + ", categoryId=" + categoryId + ", minQuantity="
-				+ minQuantity + ", maxQuantity=" + maxQuantity + ", hashCode()=" + hashCode() + ", getInstrumentId()="
-				+ getInstrumentId() + ", getDescription()=" + getDescription() + ", getExternalIdType()="
-				+ getExternalIdType() + ", getExternalId()=" + getExternalId() + ", getCategoryId()=" + getCategoryId()
-				+ ", getMinQuantity()=" + getMinQuantity() + ", getMaxQuantity()=" + getMaxQuantity() + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(categoryId, description, externalId, externalIdType, instrumentId, maxQuantity,
-				minQuantity);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Instrument other = (Instrument) obj;
-		return Objects.equals(categoryId, other.categoryId) && Objects.equals(description, other.description)
-				&& Objects.equals(externalId, other.externalId) && Objects.equals(externalIdType, other.externalIdType)
-				&& Objects.equals(instrumentId, other.instrumentId)
-				&& Double.doubleToLongBits(maxQuantity) == Double.doubleToLongBits(other.maxQuantity)
-				&& Double.doubleToLongBits(minQuantity) == Double.doubleToLongBits(other.minQuantity);
-	}
-
+   
 	private String instrumentId;
-    private String description;
+    private String instrumentDescription;
     private String externalIdType;
     private String externalId;
     private String categoryId;
@@ -45,9 +14,9 @@ public class Instrument {
     
     public Instrument() {}
     
-    public Instrument(String instrumentId, String description, String externalIdType, String externalId, String categoryId, double minQuantity, double maxQuantity) {
+    public Instrument(String instrumentId, String instrumentDescription, String externalIdType, String externalId, String categoryId, double minQuantity, double maxQuantity) {
         this.instrumentId = instrumentId;
-        this.description = description;
+        this.instrumentDescription = instrumentDescription;
         this.externalIdType = externalIdType;
         this.externalId = externalId;
         this.categoryId = categoryId;
@@ -59,8 +28,8 @@ public class Instrument {
         return instrumentId;
     }
 
-    public String getDescription() {
-        return description;
+    public String getInstrumentDescription() {
+        return instrumentDescription;
     }
 
     public String getExternalIdType() {
@@ -82,5 +51,35 @@ public class Instrument {
     public double getMaxQuantity() {
         return maxQuantity;
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(categoryId, externalId, externalIdType, instrumentDescription, instrumentId, maxQuantity,
+				minQuantity);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Instrument other = (Instrument) obj;
+		return Objects.equals(categoryId, other.categoryId) && Objects.equals(externalId, other.externalId)
+				&& Objects.equals(externalIdType, other.externalIdType)
+				&& Objects.equals(instrumentDescription, other.instrumentDescription)
+				&& Objects.equals(instrumentId, other.instrumentId)
+				&& Double.doubleToLongBits(maxQuantity) == Double.doubleToLongBits(other.maxQuantity)
+				&& Double.doubleToLongBits(minQuantity) == Double.doubleToLongBits(other.minQuantity);
+	}
+
+	@Override
+	public String toString() {
+		return "Instrument [instrumentId=" + instrumentId + ", instrumentDescription=" + instrumentDescription
+				+ ", externalIdType=" + externalIdType + ", externalId=" + externalId + ", categoryId=" + categoryId
+				+ ", minQuantity=" + minQuantity + ", maxQuantity=" + maxQuantity + "]";
+	}
 }
 

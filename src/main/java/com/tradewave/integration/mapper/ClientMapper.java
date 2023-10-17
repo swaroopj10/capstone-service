@@ -11,7 +11,7 @@ public interface ClientMapper {
 	int insertClient(Client client);
 	int insertClientIdentification(Client client);
 	int insertClientResponse(ClientResponse clientResponse);
-	String getUserByEmail(String clientId);
+	String getUserByEmail(String email);
 	String getToken(String clientId);
 	String getClientId(String clientId);
 }
