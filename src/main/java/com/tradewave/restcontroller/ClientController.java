@@ -47,7 +47,7 @@ public class ClientController {
 
             HttpEntity<ClientAuth> requestEntity = new HttpEntity<>(clientAuth, headers);
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-                    "http://localhost:3000/fmts/client",
+                    "https://a745151.roifmr.com/fmts/client",
                     requestEntity,
                     String.class
             );
@@ -57,9 +57,6 @@ public class ClientController {
                 ClientResponse clientResponse = objectMapper.readValue(responseBody, ClientResponse.class);
                 if (clientResponse != null) {
                 	client.setClientId(clientResponse.getClientId());
-//                    service.insertClient(client);
-//                    service.insertClientIdentification(client);
-//                    service.insertClientToken(clientResponse);
                     service.register(client, clientResponse);
                     return ResponseEntity.ok(responseBody); 
                 }
@@ -80,6 +77,19 @@ public class ClientController {
 	@PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Credentials credentials) {
         try {
+        	ClientAuth clientAuth = new ClientAuth();
+            clientAuth.setClientId("");
+            clientAuth.setEmail(credentials.getEmail());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<ClientAuth> requestEntity = new HttpEntity<>(clientAuth, headers);
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(
+                    "http://ec2-3-110-86-63.ap-south-1.compute.amazonaws.com:3000/fmts/client",
+                    requestEntity,
+                    String.class
+            );
+            
         	String clientId = service.getClientId(credentials.getClientId());
             if (clientId == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Client ID does not exist.");

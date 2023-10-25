@@ -32,7 +32,7 @@ import com.tradewave.restservices.TradeService;
 @RestController
 @RequestMapping("/api")
 public class TradeController {
-	private final String nodeServiceBaseUrl = "http://localhost:3000/fmts/trades";
+	private final String nodeServiceBaseUrl = "https://a745151.roifmr.com/fmts/trades";
 
     @Autowired
     private RestTemplate restTemplate;
